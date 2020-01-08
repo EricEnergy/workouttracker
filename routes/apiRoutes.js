@@ -17,38 +17,36 @@ module.exports = function (app) {
 
     //put
     app.put("/api/workouts/:id", function (req, res) {
-        db.Workout.findById(req.params.id, (err, book) => {
-            var query = { 
-                type: req.body.type,
-                name: req.body.name,
-                distance: req.body.distance,
-                duration: req.body.duration,
-                weight: req.body.weight,
-                sets: req.body.sets,
-                reps: req.body.reps
-              };   
-            res.json(query)
-        }) 
+        db.Workout.findByIdAndUpdate(req.params.id, {$push: {exercises: req.body}}) 
+            .then(dbWorkout => {
+                res.json(dbWorkout);
+            })
+            .catch(err => {
+                res.json(err);
+            });
     });
 
     //post //addbutton //
     app.post("/api/workouts", function (req, res) {
-        var query = { 
-            type: req.body.type,
-            name: req.body.name,
-            distance: req.body.distance,
-            duration: req.body.duration,
-            weight: req.body.weight,
-            sets: req.body.sets,
-            reps: req.body.reps
-          };
-          console.log(query)
-
+        db.Workout.create(body)
+        .then(dbWorkout => {
+            res.json(dbWorkout);
+        })
+        .catch(err => {
+            res.json(err);
+        });
     });
 
     //get
     app.get("/api/workouts/range", function (req, res) {
-
+        db.Workout.find({})
+        .populate("workouts")
+        .then(dbWorkout => {
+            res.send(dbWorkout);
+        })
+        .catch(err => {
+            res.send(err);
+        });
         
     });
 }
