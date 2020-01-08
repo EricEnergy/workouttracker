@@ -4,9 +4,10 @@ const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 8080;
 
-const db = require("./models");
+
 
 const app = express();
+// const db = require("./models");
 
 app.use(logger("dev"));
 
@@ -17,9 +18,14 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/populatedb", { useNewUrlParser: true });
 
-// db.User.create({ name: "Fitness tracker" })
-//     .then(dbUser => {
-//         console.log(dbUser);
+
+require("./routes/apiRoutes.js")(app);
+require("./routes/htmlRoutes.js")(app);
+
+
+// db.Workout.create({ name: "Fitness tracker" })
+//     .then(Workout => {
+//         console.log(Workout);
 //     })
 //     .catch(({ message }) => {
 //         console.log(message);
